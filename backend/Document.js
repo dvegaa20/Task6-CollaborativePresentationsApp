@@ -1,8 +1,16 @@
 const { Schema, model } = require("mongoose");
 
-const Document = new Schema({
+const DocumentSchema = new Schema({
   _id: String,
-  data: Object,
+  title: {
+    type: String,
+    required: true,
+    default: "Untitled Document",
+  },
+  type: { type: String, default: "slide" },
+  thumbnail: { type: String, default: "/placeholder.svg?height=150&width=200" },
+  lastModified: { type: Date, default: Date.now },
+  data: { type: Object, default: {} },
 });
 
-module.exports = model("Document", Document);
+module.exports = model("Document", DocumentSchema);
