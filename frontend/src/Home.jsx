@@ -1,73 +1,25 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { v4 as uuidV4 } from "uuid";
+import { format } from "date-fns";
+import Header from "./components/Header";
 
 export default function DocumentHome() {
-  const [documents, setDocuments] = useState([
-    {
-      id: "1",
-      title: "Q4 Presentation",
-      type: "slide",
-      thumbnail: "/placeholder.svg?height=150&width=200",
-      lastModified: "2 days ago",
-    },
-    {
-      id: "2",
-      title: "Marketing Flyer",
-      type: "design",
-      thumbnail: "/placeholder.svg?height=150&width=200",
-      lastModified: "1 week ago",
-    },
-    {
-      id: "3",
-      title: "Product Roadmap",
-      type: "slide",
-      thumbnail: "/placeholder.svg?height=150&width=200",
-      lastModified: "3 days ago",
-    },
-    {
-      id: "4",
-      title: "Social Media Post",
-      type: "design",
-      thumbnail: "/placeholder.svg?height=150&width=200",
-      lastModified: "1 day ago",
-    },
-    {
-      id: "5",
-      title: "Annual Report",
-      type: "slide",
-      thumbnail: "/placeholder.svg?height=150&width=200",
-      lastModified: "1 month ago",
-    },
-    {
-      id: "6",
-      title: "Event Invitation",
-      type: "design",
-      thumbnail: "/placeholder.svg?height=150&width=200",
-      lastModified: "2 weeks ago",
-    },
-  ]);
+  const navigate = useNavigate();
 
+  const [documents, setDocuments] = useState([]);
   const [isGridView, setIsGridView] = useState(true);
 
-  const handleCreateNew = () => {
-    const newDocument = {
-      id: (documents.length + 1).toString(),
-      title: "Untitled Document",
-      type: "slide",
-      thumbnail: "/placeholder.svg?height=150&width=200",
-      lastModified: "Just now",
-    };
-    setDocuments([newDocument, ...documents]);
-  };
+  useEffect(() => {
+    fetch("http://localhost:3001/documents")
+      .then((res) => res.json())
+      .then((data) => setDocuments(data))
+      .catch((error) => console.error("Error fetching documents:", error));
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <header className="bg-white shadow">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-gray-900">DocCreator</h1>
-        </div>
-      </header>
+      <Header />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex justify-between items-center mb-6">
@@ -108,15 +60,16 @@ export default function DocumentHome() {
         >
           {documents.map((doc) => (
             <div
-              key={doc.id}
+              key={doc._id}
               className={
                 isGridView
                   ? "bg-white rounded-lg shadow overflow-hidden"
                   : "bg-white rounded-lg shadow overflow-hidden flex"
               }
+              onClick={() => navigate(`/documents/${doc._id}`)}
             >
               <img
-                src={doc.thumbnail || "/placeholder.svg"}
+                src={"/document.webp" || doc.thumbnail}
                 alt={doc.title}
                 className={
                   isGridView
@@ -125,10 +78,13 @@ export default function DocumentHome() {
                 }
               />
               <div className={isGridView ? "p-4" : "p-4 flex-grow"}>
-                <h3 className="font-semibold text-lg mb-2">{doc.title}</h3>
+                <h3 className="font-semibold text-lg mb-2">
+                  {doc.title ? doc.title : "Untitled"}
+                </h3>
                 <p className="text-sm text-gray-500">
                   {doc.type === "slide" ? "Presentation" : "Design"} • Last
-                  modified {doc.lastModified}
+                  modified{" "}
+                  {format(new Date(doc.lastModified), "yyyy-MM-dd HH:mm:ss")}
                 </p>
               </div>
             </div>
