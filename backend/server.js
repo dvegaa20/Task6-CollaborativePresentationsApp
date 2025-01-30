@@ -15,7 +15,7 @@ mongoose.connect(process.env.MONGODB_URI, {});
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "https://collaborative-presentations-app.vercel.app/",
+    origin: process.env.VERCEL_URL,
     methods: ["GET", "POST"],
   },
 });
