@@ -5,14 +5,13 @@ import { format } from "date-fns";
 import Header from "./components/Header";
 
 export default function DocumentHome() {
-  const dbUrl = process.env.MONGODB_URI;
   const navigate = useNavigate();
 
   const [documents, setDocuments] = useState([]);
   const [isGridView, setIsGridView] = useState(true);
 
   useEffect(() => {
-    fetch(dbUrl)
+    fetch("http://localhost:3001/documents")
       .then((res) => res.json())
       .then((data) => setDocuments(data))
       .catch((error) => console.error("Error fetching documents:", error));
