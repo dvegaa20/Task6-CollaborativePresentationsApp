@@ -13,8 +13,8 @@ body {
 }
 
 .container .ql-editor {
-  width: 8.5in;
-  min-height: 11in;
+  width: 12.5in;
+  min-height: 8.7in;
   padding: 1in;
   margin: 1rem;
   box-shadow: 0 0 5px 0 rbga(0, 0, 0, 0.5);
@@ -25,7 +25,7 @@ body {
 .container .ql-container.ql-snow {
   border: none;
   display: flex;
-  justify-content: center;
+  justify-content: end;
 }
 
 .container .ql-toolbar.ql-snow {
