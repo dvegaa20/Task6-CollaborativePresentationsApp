@@ -84,18 +84,25 @@ export default function TextEditor() {
   const wrapperRef = useRef();
 
   useEffect(() => {
-    const editor = document.createElement("div");
-    wrapperRef.current.append(editor);
-    const q = new Quill(editor, {
-      theme: "snow",
-      modules: { toolbar: TOOLBAR_OPTIONS },
-    });
-    q.disable();
-    q.setText("Loading...");
-    setQuill(q);
+    if (wrapperRef.current) {
+      const editor = document.createElement("div");
+
+      wrapperRef.current.append(editor);
+      const q = new Quill(editor, {
+        theme: "snow",
+        modules: { toolbar: TOOLBAR_OPTIONS },
+      });
+      q.disable();
+      q.setText("Loading...");
+      setQuill(q);
+    }
+
     return () => {
-      wrapperRef.current.innerHTML = "";
+      if (wrapperRef.current) {
+        wrapperRef.current.innerHTML = "";
+      }
     };
   }, []);
+
   return <div className="container" ref={wrapperRef}></div>;
 }
