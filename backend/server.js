@@ -15,7 +15,10 @@ mongoose.connect(process.env.MONGODB_URI, {});
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "https://collaborative-presentations-app.vercel.app",
+    origin: [
+      "https://collaborative-presentations-app.vercel.app",
+      "https://collaborativepresentationsapp.onrender.com",
+    ],
     methods: ["GET", "POST"],
   },
 });
@@ -23,6 +26,7 @@ const io = new Server(server, {
 const defaultValue = "";
 
 io.on("connection", (socket) => {
+  console.log(`New client connected: ${socket.id}`);
   socket.on("get-document", async (documentId) => {
     const document = await findOrCreateDocument(documentId);
     socket.join(documentId);
