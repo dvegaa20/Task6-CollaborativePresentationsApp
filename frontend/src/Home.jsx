@@ -11,7 +11,7 @@ export default function DocumentHome() {
   const [isGridView, setIsGridView] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:3001/documents")
+    fetch("https://collaborativepresentationsapp.onrender.com/documents")
       .then((res) => res.json())
       .then((data) => setDocuments(data))
       .catch((error) => console.error("Error fetching documents:", error));
