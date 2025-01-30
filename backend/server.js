@@ -4,17 +4,21 @@ const cors = require("cors");
 const express = require("express");
 const { Server } = require("socket.io");
 const http = require("http");
+require("dotenv").config();
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-mongoose.connect("mongodb://localhost/collaborative-presentation", {});
+mongoose
+  .connect(process.env.MONGODB_URI, {})
+  .then(() => console.log("✅ Conectado a MongoDB Atlas"))
+  .catch((err) => console.error("❌ Error al conectar a MongoDB Atlas:", err));
 
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: process.env.VERCEL_URL,
     methods: ["GET", "POST"],
   },
 });
