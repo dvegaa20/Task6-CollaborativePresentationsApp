@@ -10,15 +10,12 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-mongoose
-  .connect(process.env.MONGODB_URI, {})
-  .then(() => console.log("✅ Conectado a MongoDB Atlas"))
-  .catch((err) => console.error("❌ Error al conectar a MongoDB Atlas:", err));
+mongoose.connect(process.env.MONGODB_URI, {});
 
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: process.env.VERCEL_URL,
+    origin: "https://collaborative-presentations-app.vercel.app/",
     methods: ["GET", "POST"],
   },
 });
